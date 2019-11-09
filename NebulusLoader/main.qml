@@ -33,6 +33,26 @@ ApplicationWindow {
                 applicationWindow.y += mouseY - dy
             }
         }
+        Text {
+            id: headerText
+            anchors.top: parent.top
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.topMargin: 6
+            text: qsTr("Load application name")
+        }
+        Text {
+            id: currentOperation
+            anchors.centerIn: parent
+            font.pixelSize: 20
+            text: qsTr("Current operation")
+        }
+        Text {
+            id: processedFile
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottomMargin: 6
+            text: qsTr("Current processed file")
+        }
     }
 
     DropShadow {
