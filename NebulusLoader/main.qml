@@ -1,40 +1,47 @@
 import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.VirtualKeyboard 2.4
+import QtQuick.Controls 2.12
+import QtGraphicalEffects 1.0
 
-Window {
-    id: window
+ApplicationWindow {
+    id: applicationWindow
     visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
+    width: 620
+    height: 120
+    title: qsTr("Application Loader")
+    flags: Qt.FramelessWindowHint | Qt.Window
 
-    InputPanel {
-        id: inputPanel
-        z: 99
-        x: 0
-        y: window.height
-        width: window.width
+    background: Rectangle {
+        color: "transparent"
+    }
 
-        states: State {
-            name: "visible"
-            when: inputPanel.active
-            PropertyChanges {
-                target: inputPanel
-                y: window.height - inputPanel.height
+    Rectangle {
+        id: rect
+        anchors.fill: parent
+        anchors.margins: 2
+        MouseArea {
+            anchors.fill: parent
+
+            property int dx
+            property int dy
+
+            onPressed: {
+                dx = mouseX;
+                dy = mouseY
+            }
+            onPositionChanged: {
+                applicationWindow.x += mouseX - dx
+                applicationWindow.y += mouseY - dy
             }
         }
-        transitions: Transition {
-            from: ""
-            to: "visible"
-            reversible: true
-            ParallelAnimation {
-                NumberAnimation {
-                    properties: "y"
-                    duration: 250
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
+    }
+
+    DropShadow {
+        anchors.fill: rect
+        horizontalOffset: 1
+        verticalOffset: 1
+        radius: 5
+        samples: 10
+        source: rect
+        color: "black"
     }
 }
