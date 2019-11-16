@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtGraphicalEffects 1.0
+import Nebulus 1.0
 
 ApplicationWindow {
     id: applicationWindow
@@ -12,6 +13,14 @@ ApplicationWindow {
 
     background: Rectangle {
         color: "transparent"
+    }
+
+    ApplicationLoader {
+        id: applicationLoader
+    }
+
+    QmlFileProcessor {
+        id: qmlFileProcessor
     }
 
     Rectangle {
