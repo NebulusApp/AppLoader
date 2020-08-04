@@ -1,8 +1,11 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QDir>
+
 #include "qmlfileprocessor.h"
 #include "applicationloader.h"
+#include "applicationslibrary.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,18 +13,29 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    qmlRegisterType<QmlFileProcessor>("Nebulus", 1, 0, "QmlFileProcessor");
-    qmlRegisterType<ApplicationLoader>("Nebulus", 1, 0, "ApplicationLoader");
-
     QQmlApplicationEngine engine;
 
-    /*QDir::addSearchPath("res", "D:/romanus/testqml");
+    QUrl url;
+    if (argc == 1) {
+        //if run without an argument then show available applications and settings page
 
-    engine.addImportPath("D:/romanus/testqml");
+        //register inner toolset for work with applications data and setup
+        qmlRegisterType<QmlFileProcessor>("Nebulus", 1, 0, "QmlFileProcessor");
+        qmlRegisterType<ApplicationLoader>("Nebulus", 1, 0, "ApplicationLoader");
 
-    const QUrl url(QStringLiteral("res:main.qml"));*/
+        url.setUrl(QStringLiteral("qrc:/main.qml"));
+    } else {
+        //if run with an argument, then run the application by the appId
+        auto applicationLibrary = new ApplicationsLibrary();
+        applicationLibrary->setApplicationIdentifier(argv[1]);
+        auto applicationPath = applicationLibrary->getApplicationPath();
 
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+        QDir::addSearchPath("res", applicationPath);
+        engine.addImportPath(applicationPath);
+
+        url.setUrl(QStringLiteral("res:main.qml"));
+    }
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreated,

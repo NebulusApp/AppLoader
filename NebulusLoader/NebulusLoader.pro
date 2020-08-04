@@ -15,6 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         applicationloader.cpp \
+        applicationslibrary.cpp \
         main.cpp \
         qmlfileprocessor.cpp
 
@@ -33,4 +34,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     applicationloader.h \
+    applicationslibrary.h \
     qmlfileprocessor.h

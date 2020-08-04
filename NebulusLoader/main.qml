@@ -8,7 +8,7 @@ ApplicationWindow {
     visible: true
     width: 620
     height: 120
-    title: qsTr("Application Loader")
+    title: qsTr("Nebulus application runner")
     flags: Qt.FramelessWindowHint | Qt.Window
 
     background: Rectangle {
