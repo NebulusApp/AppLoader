@@ -4,7 +4,8 @@ ApplicationLoader::ApplicationLoader(QObject *parent) :
     QObject(parent),
     m_ApplicationName(""),
     m_CurrentOperation(""),
-    m_ProcessedFile("")
+    m_ProcessedFile(""),
+    m_NetworkManager()
 {
 
 }
@@ -46,4 +47,17 @@ void ApplicationLoader::setProcessedFile(QString &processedFile)
 
     m_ProcessedFile = processedFile;
     emit processedFileChanged();
+}
+
+void ApplicationLoader::loadApplication(QString &path)
+{
+    QNetworkRequest request;
+    request.setUrl(path);
+    auto _reply = m_NetworkManager->get(request);
+    /*connect(_reply, SIGNAL(error(QNetworkReply::NetworkError)),
+                this, SLOT(error(QNetworkReply::NetworkError)));
+    connect(_reply, SIGNAL(downloadProgress(qint64, qint64)),
+                this, SLOT(updateProgress(qint64, qint64)));
+    connect(_reply, SIGNAL(finished()),
+                this, SLOT(finished()));*/
 }

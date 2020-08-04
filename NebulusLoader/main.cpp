@@ -6,8 +6,6 @@
 
 int main(int argc, char *argv[])
 {
-    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
-
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
@@ -16,6 +14,13 @@ int main(int argc, char *argv[])
     qmlRegisterType<ApplicationLoader>("Nebulus", 1, 0, "ApplicationLoader");
 
     QQmlApplicationEngine engine;
+
+    /*QDir::addSearchPath("res", "D:/romanus/testqml");
+
+    engine.addImportPath("D:/romanus/testqml");
+
+    const QUrl url(QStringLiteral("res:main.qml"));*/
+
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(
         &engine,

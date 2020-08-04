@@ -2,6 +2,7 @@
 #define APPLICATIONLOADER_H
 
 #include <QObject>
+#include <QNetworkAccessManager>
 
 class ApplicationLoader : public QObject
 {
@@ -15,6 +16,7 @@ private:
     QString m_ApplicationName;
     QString m_CurrentOperation;
     QString m_ProcessedFile;
+    QNetworkAccessManager* m_NetworkManager;
 
 public:
     explicit ApplicationLoader(QObject *parent = nullptr);
@@ -27,6 +29,8 @@ public:
 
     QString processedFile();
     void setProcessedFile(QString& processedFile);
+
+    Q_INVOKABLE void loadApplication(QString& path);
 
 signals:
     void applicationNameChanged();
