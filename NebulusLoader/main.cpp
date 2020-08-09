@@ -7,9 +7,22 @@
 #include "applicationloader.h"
 #include "applicationslibrary.h"
 
+//if run without an argument then show available applications and settings page
+void runNormal(QUrl& url) {
+    //register inner toolset for work with applications data and setup
+    qmlRegisterType<QmlFileProcessor>("Nebulus", 1, 0, "QmlFileProcessor");
+    qmlRegisterType<ApplicationLoader>("Nebulus", 1, 0, "ApplicationLoader");
+
+    url.setUrl(QStringLiteral("qrc:/main.qml"));
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+    QCoreApplication::setOrganizationName("EmptyFlow");
+    QCoreApplication::setOrganizationDomain("emptyflow.com");
+    QCoreApplication::setApplicationName("NebulusPlatform");
 
     QGuiApplication app(argc, argv);
 
@@ -17,23 +30,23 @@ int main(int argc, char *argv[])
 
     QUrl url;
     if (argc == 1) {
-        //if run without an argument then show available applications and settings page
-
-        //register inner toolset for work with applications data and setup
-        qmlRegisterType<QmlFileProcessor>("Nebulus", 1, 0, "QmlFileProcessor");
-        qmlRegisterType<ApplicationLoader>("Nebulus", 1, 0, "ApplicationLoader");
-
-        url.setUrl(QStringLiteral("qrc:/main.qml"));
+        runNormal(url);
     } else {
-        //if run with an argument, then run the application by the appId
-        auto applicationLibrary = new ApplicationsLibrary();
-        applicationLibrary->setApplicationIdentifier(argv[1]);
-        auto applicationPath = applicationLibrary->getApplicationPath();
+        auto argument = QString(argv[1]);
+        if (argument.startsWith("https://")) {
+            runNormal(url);
+            engine.rootContext()->setContextProperty("addressForApplicationProject", QDateTime::currentDateTime());
+        } else {
+            //if run with an argument, then run the application by the appId
+            auto applicationLibrary = new ApplicationsLibrary();
+            applicationLibrary->setApplicationIdentifier(argument);
+            auto applicationPath = applicationLibrary->applicationPath();
 
-        QDir::addSearchPath("res", applicationPath);
-        engine.addImportPath(applicationPath);
+            QDir::addSearchPath("res", applicationPath);
+            engine.addImportPath(applicationPath);
 
-        url.setUrl(QStringLiteral("res:main.qml"));
+            url.setUrl(QStringLiteral("res:main.qml"));
+        }
     }
 
     QObject::connect(
