@@ -1,3 +1,4 @@
+#include <QNetworkReply>
 #include "applicationloader.h"
 
 ApplicationLoader::ApplicationLoader(QObject *parent) :
@@ -7,7 +8,7 @@ ApplicationLoader::ApplicationLoader(QObject *parent) :
     m_ProcessedFile(""),
     m_NetworkManager()
 {
-
+    connect(m_NetworkManager, &QNetworkAccessManager::finished, this, &ApplicationLoader::downloadFile);
 }
 
 QString ApplicationLoader::applicationName()
@@ -49,15 +50,17 @@ void ApplicationLoader::setProcessedFile(QString &processedFile)
     emit processedFileChanged();
 }
 
+void ApplicationLoader::downloadFile(QNetworkReply *reply)
+{
+    if (reply->error() == QNetworkReply::TimeoutError) return;
+    if (reply->error() == QNetworkReply::ProtocolFailure) return;
+    if (reply->error() == QNetworkReply::HostNotFoundError) return;
+
+}
+
 void ApplicationLoader::loadApplication(QString &path)
 {
     QNetworkRequest request;
     request.setUrl(path);
-    auto _reply = m_NetworkManager->get(request);
-    /*connect(_reply, SIGNAL(error(QNetworkReply::NetworkError)),
-                this, SLOT(error(QNetworkReply::NetworkError)));
-    connect(_reply, SIGNAL(downloadProgress(qint64, qint64)),
-                this, SLOT(updateProgress(qint64, qint64)));
-    connect(_reply, SIGNAL(finished()),
-                this, SLOT(finished()));*/
+    m_NetworkManager->get(request);
 }

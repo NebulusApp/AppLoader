@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 class ApplicationLoader : public QObject
 {
@@ -29,6 +30,8 @@ public:
 
     QString processedFile();
     void setProcessedFile(QString& processedFile);
+
+    void downloadFile(QNetworkReply *reply);
 
     Q_INVOKABLE void loadApplication(QString& path);
 
