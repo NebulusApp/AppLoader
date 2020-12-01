@@ -16,6 +16,5 @@ void ApplicationsLibrary::setApplicationIdentifier(const QString &applicationIde
     auto directory = QDir(appLocation);
     if (directory.exists()) {
         m_ApplicationPath = appLocation + "/";
-        emit applicationPathChanged();
     }
 }

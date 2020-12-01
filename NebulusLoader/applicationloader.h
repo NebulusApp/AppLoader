@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QtQml>
+#include <QCryptographicHash>
+#include "applicationslibrary.h"
 
 class ApplicationLoader : public QObject
 {
@@ -13,11 +16,15 @@ class ApplicationLoader : public QObject
     Q_PROPERTY(QString currentOperation READ currentOperation WRITE setCurrentOperation NOTIFY currentOperationChanged)
     Q_PROPERTY(QString processedFile READ processedFile WRITE setProcessedFile NOTIFY processedFileChanged)
 
+    QML_ELEMENT
+
 private:
     QString m_ApplicationName;
     QString m_CurrentOperation;
     QString m_ProcessedFile;
     QNetworkAccessManager* m_NetworkManager;
+    ApplicationsLibrary* m_ApplicationLibrary;
+    QNetworkReply* m_HashNetworkReply;
 
 public:
     explicit ApplicationLoader(QObject *parent = nullptr);
@@ -32,8 +39,13 @@ public:
     void setProcessedFile(QString& processedFile);
 
     void downloadFile(QNetworkReply *reply);
+    void downloadHash();
 
-    Q_INVOKABLE void loadApplication(QString& path);
+    Q_INVOKABLE void loadApplication();
+
+private:
+    QByteArray getCheckSum(const QString &fileName);
+    void restartApplication();
 
 signals:
     void applicationNameChanged();

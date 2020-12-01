@@ -1,6 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import Nebulus 1.0
+import nebulus 1.0
 
 ApplicationWindow {
     id: applicationWindow
@@ -17,10 +17,6 @@ ApplicationWindow {
 
     ApplicationLoader {
         id: applicationLoader
-    }
-
-    QmlFileProcessor {
-        id: qmlFileProcessor
     }
 
     Text {
@@ -88,7 +84,6 @@ ApplicationWindow {
         color: "#E3D7C5"
         width: parent.width
         height: 50
-        anchors.bottom: parent.bottom
 
         Text {
             id: headerText
@@ -96,7 +91,7 @@ ApplicationWindow {
             anchors.leftMargin: 20
             anchors.verticalCenter: parent.verticalCenter
             font.pixelSize: 12
-            text: qsTr("platform version 1.0")
+            text: qsTr("platform version 1.0.0")
         }
         Text {
             id: currentOperation

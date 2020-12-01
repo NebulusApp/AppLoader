@@ -3,18 +3,7 @@
 #include <QQmlContext>
 #include <QDir>
 
-#include "qmlfileprocessor.h"
-#include "applicationloader.h"
-#include "applicationslibrary.h"
-
-//if run without an argument then show available applications and settings page
-void runNormal(QUrl& url) {
-    //register inner toolset for work with applications data and setup
-    qmlRegisterType<QmlFileProcessor>("Nebulus", 1, 0, "QmlFileProcessor");
-    qmlRegisterType<ApplicationLoader>("Nebulus", 1, 0, "ApplicationLoader");
-
-    url.setUrl(QStringLiteral("qrc:/main.qml"));
-}
+#include "applicationbootstrap.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,23 +18,19 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     QUrl url;
-    if (argc == 1) {
-        runNormal(url);
-    } else {
-        auto argument = QString(argv[1]);
-        if (argument.startsWith("https://")) {
-            runNormal(url);
-            engine.rootContext()->setContextProperty("addressForApplicationProject", QDateTime::currentDateTime());
-        } else {
-            //if run with an argument, then run the application by the appId
-            auto applicationLibrary = new ApplicationsLibrary();
-            applicationLibrary->setApplicationIdentifier(argument);
-            auto applicationPath = applicationLibrary->applicationPath();
+    url.setUrl(QStringLiteral("qrc:/main.qml"));
+    if (argc > 1 && QString(argv[1]) == "update") {
+        //run application by identifier
+        try {
+            auto applicationBootstrap = new ApplicationBootstrap();
 
-            QDir::addSearchPath("res", applicationPath);
-            engine.addImportPath(applicationPath);
+            auto needInstall = applicationBootstrap->checkIfNeedInstallApplication();
+            if (!needInstall) url.setUrl(applicationBootstrap->applicationPath());
 
-            url.setUrl(QStringLiteral("res:main.qml"));
+            delete applicationBootstrap;
+        }  catch (const std::invalid_argument& e) {
+            qCritical() << "Argument incorect";
+            QCoreApplication::exit(2);
         }
     }
 

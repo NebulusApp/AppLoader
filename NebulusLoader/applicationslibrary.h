@@ -8,21 +8,21 @@ class ApplicationsLibrary : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString applicationPath READ applicationPath NOTIFY applicationPathChanged)
 private:
     QString m_ApplicationIdentifier;
     QString m_ApplicationPath;
+    QString m_ApplicationHash;
+    bool m_ApplicationInLibrary;
 
 public:
     explicit ApplicationsLibrary(QObject *parent = nullptr);
 
     void setApplicationIdentifier(const QString& applicationIdentifier);
 
+    QString applicationIdentifier() const { return m_ApplicationIdentifier; }
     QString applicationPath() const { return m_ApplicationPath; }
-
-signals:
-    void applicationPathChanged();
-
+    QString applicationHash() const { return m_ApplicationHash; }
+    bool applicationInLibrary() const { return m_ApplicationInLibrary; }
 };
 
 #endif // APPLICATIONSLIBRARY_H
