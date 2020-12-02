@@ -13,6 +13,7 @@ private:
     QString m_ApplicationPath;
     QString m_ApplicationHash;
     bool m_ApplicationInLibrary;
+    QString m_ApplicationName;
 
 public:
     explicit ApplicationsLibrary(QObject *parent = nullptr);
@@ -22,6 +23,7 @@ public:
     QString applicationIdentifier() const { return m_ApplicationIdentifier; }
     QString applicationPath() const { return m_ApplicationPath; }
     QString applicationHash() const { return m_ApplicationHash; }
+    QString applicationName() const { return m_ApplicationName; }
     bool applicationInLibrary() const { return m_ApplicationInLibrary; }
 };
 

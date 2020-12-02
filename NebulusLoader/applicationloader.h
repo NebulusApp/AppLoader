@@ -20,6 +20,7 @@ class ApplicationLoader : public QObject
 
 private:
     QString m_ApplicationName;
+    QString m_ApplicationIndetifier;
     QString m_CurrentOperation;
     QString m_ProcessedFile;
     QNetworkAccessManager* m_NetworkManager;

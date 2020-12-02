@@ -4,14 +4,15 @@
 ApplicationLoader::ApplicationLoader(QObject *parent) :
     QObject(parent),
     m_ApplicationName(""),
+    m_ApplicationIndetifier(""),
     m_CurrentOperation(""),
     m_ProcessedFile(""),
     m_ApplicationLibrary(new ApplicationsLibrary())
 {
-    auto arguments = QCoreApplication::arguments();
-    if (arguments.count() > 1) {
-
-    }
+    m_ApplicationIndetifier = QCoreApplication::arguments()[1];
+    m_ApplicationLibrary->setApplicationIdentifier(m_ApplicationIndetifier);
+    auto applicationName = m_ApplicationLibrary->applicationName();
+    setApplicationName(applicationName);
 
     m_NetworkManager = new QNetworkAccessManager();
     connect(m_NetworkManager, &QNetworkAccessManager::finished, this, &ApplicationLoader::downloadFile);
